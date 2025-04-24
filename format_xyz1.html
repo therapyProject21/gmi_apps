@@ -1,0 +1,545 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   Full Width Slider Below Header with SPA Navigation
+  </title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+  <style>
+   body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+   /* Aspect ratio helper for iframe */
+   .aspect-w-16 {
+     position: relative;
+     width: 100%;
+   }
+   .aspect-w-16::before {
+     content: "";
+     display: block;
+     padding-top: 56.25%; /* 16:9 ratio */
+   }
+   .aspect-h-9 > iframe {
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+   }
+   /* Scrollable container with hidden scrollbar */
+   #scroll-container {
+     height: 100vh;
+     overflow-y: auto;
+     -webkit-overflow-scrolling: touch;
+     scrollbar-width: none; /* Firefox */
+     -ms-overflow-style: none;  /* IE and Edge */
+   }
+   #scroll-container::-webkit-scrollbar {
+     display: none; /* Chrome, Safari, Opera */
+   }
+  </style>
+ </head>
+ <body class="bg-gray-50">
+  <header class="bg-white shadow-md fixed top-0 left-0 right-0 z-30">
+   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+     <a class="flex items-center" href="#" data-page="beranda">
+      <img alt="Company logo, a stylized blue and white abstract shape" class="h-10 w-10" height="40" src="https://storage.googleapis.com/a1aa/image/73159b1b-aa85-442c-0a95-0ed99f15dc8d.jpg" width="40"/>
+      <span class="ml-3 text-xl font-semibold text-gray-900">
+      </span>
+     </a>
+     <nav class="hidden md:flex space-x-8">
+      <a href="#" data-page="beranda" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition duration-150">
+       Beranda
+      </a>
+      <a href="#" data-page="holistik" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition duration-150">
+       Holistik Modern
+      </a>
+      <a href="#" data-page="akademi" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition duration-150">
+       Akademi Sujok Healing
+      </a>
+      <a href="#" data-page="pengaturan" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition duration-150">
+       Pengaturan
+      </a>
+      <a href="#" data-page="personal" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition duration-150">
+       Personal
+      </a>
+     </nav>
+     <div class="flex items-center md:hidden">
+      <button aria-label="Open menu" class="text-gray-700 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600" id="mobile-menu-button">
+       <i class="fas fa-bars fa-lg"></i>
+      </button>
+     </div>
+    </div>
+   </div>
+   <div class="md:hidden hidden px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200" id="mobile-menu">
+    <a href="#" data-page="beranda" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
+     Beranda
+    </a>
+    <a href="#" data-page="holistik" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
+     Holistik Modern
+    </a>
+    <a href="#" data-page="akademi" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
+     Akademi Sujok Healing
+    </a>
+    <a href="#" data-page="pengaturan" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
+     Pengaturan
+    </a>
+    <a href="#" data-page="personal" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
+     Personal
+    </a>
+   </div>
+  </header>
+
+  <div id="scroll-container" class="pt-16">
+      <section class="w-full h-[70vh] overflow-hidden">
+        <div class="relative overflow-hidden">
+          <div class="flex transition-transform duration-700 ease-in-out" id="slider" style="width: 100%;">
+            <img
+              src="noreply.jpg"
+              alt="Scenic mountain landscape"
+              class="w-full h-full object-cover"
+            />
+            <!-- Gambar lainnya sama seperti di atas -->
+          </div>
+        </div>
+      </section>     
+
+   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 min-h-[24rem]" id="content" tabindex="0">
+    <!-- Initial content is Beranda with full detailed content -->
+   </main>
+  </div>
+
+  <script>
+   // Mobile menu toggle
+   const btn = document.getElementById('mobile-menu-button');
+   const menu = document.getElementById('mobile-menu');
+
+   btn.addEventListener('click', () => {
+     menu.classList.toggle('hidden');
+   });
+
+   // SPA content for each page
+   const pages = {
+     beranda: `
+       <div class="mt-4 text-gray-700" id="pageContent">
+        <main class="flex-grow max-w-full mx-auto w-full px-0 sm:px-0 lg:px-0">
+         <!-- Nav Slide Full Width with one image full viewport width -->
+         <!-- Kotak 1 -->
+         <section class="mt-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8" id="pelatihan">
+          <img alt="Square logo of GMI Green Medicine Institute, green leaf with text GMI, 150 by 150 pixels" class="w-[150px] h-[150px] object-contain flex-shrink-0 rounded-md shadow-md" src="logo_ikonik.png"/>
+          <div class="text-gray-700 text-base sm:text-lg leading-relaxed max-w-xl">
+           <p align="justify">
+            GMI (Green Medicine Institute) merupakan sebuah lembaga yang menitik beratkan pada
+                pengembangan potensi sehat secara holistik modern. Pengembangan yang dilakukan dengan
+                pelayanan dan penyebaran informasi lewat pendidikan dan pelatihan dibidang Holistic
+                Medicine yang telah merintis sejak tahun 2007.
+           </p>
+           <p align="justify" class="mt-4">
+            Berbagai kegiatan pelatihan kesehatan natural telah dilakukan oleh Green Medicine Institute
+                dengan beberapa lembaga baik pemerintah, swasta dan organisasi massa.
+           </p>
+          </div>
+         </section>
+         <!-- Kotak 2 -->
+         <section class="mt-12 mb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 gap-12" id="akademi">
+          <div class="border border-green-600 rounded-lg p-6 shadow-md bg-green-50">
+           <h2 class="text-green-700 font-semibold text-xl mb-4 text-center">
+            Visi
+           </h2>
+           <ul class="list-disc list-inside text-gray-800 text-base leading-relaxed">
+            <li>
+             Mewujudkan masyarakat yang sehat secara holistik dan alami.
+            </li>
+            <li>
+             Mengembangkan ilmu dan praktik Holistic Medicine yang modern dan terpercaya.
+            </li>
+            <li>
+             Menjadi pusat pendidikan dan pelatihan kesehatan natural terdepan di Indonesia.
+            </li>
+           </ul>
+          </div>
+          <div class="border border-green-600 rounded-lg p-6 shadow-md bg-green-50">
+           <h2 class="text-green-700 font-semibold text-xl mb-4 text-center">
+            Misi
+           </h2>
+           <ul class="list-disc list-inside text-gray-800 text-base leading-relaxed">
+            <li>
+             Menyelenggarakan pelatihan dan pendidikan Holistic Medicine secara berkualitas.
+            </li>
+            <li>
+             Menyebarluaskan informasi dan pengetahuan kesehatan natural kepada masyarakat luas.
+            </li>
+            <li>
+             Bekerjasama dengan berbagai lembaga untuk pengembangan kesehatan holistik.
+            </li>
+            <li>
+             Mendorong pengembangan potensi sehat secara alami dan berkelanjutan.
+            </li>
+           </ul>
+          </div>
+         </section>
+         <!-- Profil Founder -->
+         <section class="mb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" id="founders">
+          <h2 class="text-green-700 font-semibold text-3xl mb-10 text-center">
+           Profil Founder
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-12 max-w-5xl mx-auto">
+           <!-- Founder 1 -->
+           <div class="bg-green-50 border border-green-600 rounded-lg shadow-md p-6 flex flex-col items-center text-center">
+            <img alt="Portrait of Founder 1, a confident middle-aged man with short black hair, wearing a white shirt and green blazer, standing in a natural outdoor setting with soft sunlight" class="w-48 h-48 rounded-full object-cover shadow-lg mb-6" src="https://storage.googleapis.com/a1aa/image/22277709-2775-44fa-8d04-c40bb049173b.jpg"/>
+            <h3 class="text-xl font-semibold text-green-800 mb-2">
+             Dr. Andi Wijaya
+            </h3>
+            <p class="text-green-700 italic mb-4">
+             Co-Founder &amp; Chief Holistic Medicine Expert
+            </p>
+            <p class="text-gray-700 text-base leading-relaxed">
+             Dr. Andi Wijaya adalah seorang ahli Holistic Medicine dengan pengalaman lebih dari 20 tahun. Beliau memimpin pengembangan metode pengobatan alami yang inovatif dan modern di GMI, serta aktif mengajar dan membimbing para praktisi kesehatan natural.
+            </p>
+           </div>
+           <!-- Founder 2 -->
+           <div class="bg-green-50 border border-green-600 rounded-lg shadow-md p-6 flex flex-col items-center text-center">
+            <img alt="Portrait of Founder 2, a warm middle-aged woman with long dark hair, wearing a light green blouse, smiling gently in a cozy indoor setting with plants" class="w-48 h-48 rounded-full object-cover shadow-lg mb-6" src="https://storage.googleapis.com/a1aa/image/f173c3b1-791c-43fb-882b-01a2a3737232.jpg"/>
+            <h3 class="text-xl font-semibold text-green-800 mb-2">
+             Sari Dewi
+            </h3>
+            <p class="text-green-700 italic mb-4">
+             Co-Founder &amp; Sujok Healing Specialist
+            </p>
+            <p class="text-gray-700 text-base leading-relaxed">
+             Sari Dewi adalah praktisi Sujok Healing yang berpengalaman dan pendiri Akademi Sujok Healing di GMI. Beliau berdedikasi dalam mengembangkan pelatihan dan terapi yang menggabungkan teknik tradisional dan modern untuk kesehatan holistik.
+            </p>
+           </div>
+          </div>
+         </section>
+         <!-- Kurikulum -->
+         <section class="mb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" id="kurikulum">
+          <h2 class="text-green-700 font-semibold text-3xl mb-10 text-center">
+           Kurikulum Keilmuan GMI Meliputi
+          </h2>
+          <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+           <!-- Holistik Wellness -->
+           <div>
+            <h3 class="text-xl font-semibold text-green-800 mb-4 border-b border-green-600 pb-2">
+             Holistik Wellness
+            </h3>
+            <ul class="list-disc list-inside text-gray-800 text-base leading-relaxed space-y-1">
+             <li>
+              Mind Management
+             </li>
+             <li>
+              Bekam Holistik
+             </li>
+             <li>
+              Terapi Sujok
+             </li>
+             <li>
+              Gurah
+             </li>
+             <li>
+              Fasdhu
+             </li>
+             <li>
+              Ruqyah
+             </li>
+             <li>
+              Applied Kinesiology
+             </li>
+             <li>
+              Herbalogi
+             </li>
+             <li>
+              Patologi
+             </li>
+             <li>
+              Emosional Healing
+             </li>
+             <li>
+              Management Klinik
+             </li>
+             <li>
+              Palmology
+             </li>
+             <li>
+              Iridiology, dll
+             </li>
+            </ul>
+           </div>
+           <!-- Digital Marketing -->
+           <div>
+            <h3 class="text-xl font-semibold text-green-800 mb-4 border-b border-green-600 pb-2">
+             Digital Marketing
+            </h3>
+            <ul class="list-disc list-inside text-gray-800 text-base leading-relaxed space-y-1">
+             <li>
+              Mindset
+             </li>
+             <li>
+              Teknik closing
+             </li>
+             <li>
+              Desain Grafis
+             </li>
+             <li>
+              Editing Video
+             </li>
+             <li>
+              Copywriting
+             </li>
+             <li>
+              Optimasi Marketplace
+             </li>
+             <li>
+              Optimasi Media Sosial, dll
+             </li>
+            </ul>
+           </div>
+          </div>
+          <!-- Gallery Widget -->
+          <div class="mt-12 max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+           <div class="flex flex-col items-center">
+            <img alt="Gallery image 1 showing a holistic wellness training session with people practicing meditation in a bright room" class="w-full h-40 object-cover rounded-lg shadow-md mb-2" src="https://storage.googleapis.com/a1aa/image/ccf8c82e-897c-47a7-2a0b-807cfad4ff07.jpg"/>
+            <p class="text-center text-gray-700 text-sm">
+             Meditation Training Session
+            </p>
+           </div>
+           <div class="flex flex-col items-center">
+            <img alt="Gallery image 2 showing herbal plants and natural remedies arranged on a wooden table" class="w-full h-40 object-cover rounded-lg shadow-md mb-2" src="https://storage.googleapis.com/a1aa/image/2a7ca631-139f-40e5-30c7-e43a048f17da.jpg"/>
+            <p class="text-center text-gray-700 text-sm">
+             Herbal Plants &amp; Remedies
+            </p>
+           </div>
+           <div class="flex flex-col items-center">
+            <img alt="Gallery image 3 showing a digital marketing workshop with people using laptops and discussing ideas" class="w-full h-40 object-cover rounded-lg shadow-md mb-2" src="https://storage.googleapis.com/a1aa/image/ef435567-5636-4b70-7a5b-6cd69ff2431b.jpg"/>
+            <p class="text-center text-gray-700 text-sm">
+             Digital Marketing Workshop
+            </p>
+           </div>
+           <div class="flex flex-col items-center">
+            <img alt="Gallery image 4 showing a close-up of hands performing Sujok therapy on a patient's hand" class="w-full h-40 object-cover rounded-lg shadow-md mb-2" src="https://storage.googleapis.com/a1aa/image/04fc132d-4dc4-4a12-7435-7d483d663979.jpg"/>
+            <p class="text-center text-gray-700 text-sm">
+             Sujok Therapy Close-up
+            </p>
+           </div>
+           <div class="flex flex-col items-center">
+            <img alt="Gallery image 5 showing a classroom setting with students learning about natural medicine" class="w-full h-40 object-cover rounded-lg shadow-md mb-2" src="https://storage.googleapis.com/a1aa/image/fa108e39-9fe6-4975-6834-9a41ecb449ee.jpg"/>
+            <p class="text-center text-gray-700 text-sm">
+             Natural Medicine Classroom
+            </p>
+           </div>
+           <div class="flex flex-col items-center">
+            <img alt="Gallery image 6 showing a person practicing palmology with a hand close-up and charts" class="w-full h-40 object-cover rounded-lg shadow-md mb-2" src="https://storage.googleapis.com/a1aa/image/47e13f59-f14c-4160-2ec6-d630fab1eadf.jpg"/>
+            <p class="text-center text-gray-700 text-sm">
+             Palmology Practice
+            </p>
+           </div>
+           <div class="flex flex-col items-center">
+            <img alt="Gallery image 7 showing a video editing workstation with multiple screens and editing software" class="w-full h-40 object-cover rounded-lg shadow-md mb-2" src="https://storage.googleapis.com/a1aa/image/d63d6da0-f029-4d7c-50b3-1d895ed36ec5.jpg"/>
+            <p class="text-center text-gray-700 text-sm">
+             Video Editing Workstation
+            </p>
+           </div>
+           <div class="flex flex-col items-center">
+            <img alt="Gallery image 8 showing a group photo of GMI members during a training event outdoors" class="w-full h-40 object-cover rounded-lg shadow-md mb-2" src="https://storage.googleapis.com/a1aa/image/0a175cb9-79aa-496a-bd35-593776ac26fc.jpg"/>
+            <p class="text-center text-gray-700 text-sm">
+             GMI Training Event
+            </p>
+           </div>
+          </div>
+         </section>
+         <!-- Cerita Mereka -->
+         <section class="mb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" id="cerita">
+          <h2 class="text-green-700 font-semibold text-3xl mb-10 text-center">
+           Cerita Mereka tentang GMI
+          </h2>
+          <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+           <div class="aspect-w-16 aspect-h-9">
+            <iframe class="w-full h-64 md:h-80 rounded-lg shadow-lg" src="https://www.youtube.com/embed/5qap5aO4i9A" title="Cerita Founder 1 tentang GMI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+           </div>
+           <div class="aspect-w-16 aspect-h-9">
+            <iframe class="w-full h-64 md:h-80 rounded-lg shadow-lg" src="https://www.youtube.com/embed/ScMzIvxBSi4" title="Cerita Founder 2 tentang GMI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+           </div>
+          </div>
+         </section>
+         <!-- Our Sosial Media -->
+         <section class="mb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" id="sosial-media">
+          <h2 class="text-green-700 font-semibold text-3xl mb-10 text-center">
+           Our Sosial Media
+          </h2>
+          <div class="flex justify-center space-x-10 text-green-700 text-4xl">
+           <a aria-label="Facebook" href="https://www.facebook.com/GreenMedicineInstitute" target="_blank" rel="noopener noreferrer" class="hover:text-green-900 transition">
+            <i class="fab fa-facebook-square"></i>
+           </a>
+           <a aria-label="TikTok" href="https://www.tiktok.com/@greenmedicineinstitute" target="_blank" rel="noopener noreferrer" class="hover:text-green-900 transition">
+            <i class="fab fa-tiktok"></i>
+           </a>
+           <a aria-label="YouTube" href="https://www.youtube.com/c/GreenMedicineInstitute" target="_blank" rel="noopener noreferrer" class="hover:text-green-900 transition">
+            <i class="fab fa-youtube-square"></i>
+           </a>
+           <a aria-label="Instagram" href="https://www.instagram.com/greenmedicineinstitute" target="_blank" rel="noopener noreferrer" class="hover:text-green-900 transition">
+            <i class="fab fa-instagram-square"></i>
+           </a>
+          </div>
+         </section>
+        </main>
+       </div>
+     `,
+     holistik: `
+      <section class="py-8">
+       <h1 class="text-3xl font-semibold text-gray-900 mb-4">Holistik Modern</h1>
+       <p class="text-gray-700 mb-6">Selamat datang di halaman Holistik Modern. Di sini kami membahas pendekatan kesehatan yang menyeluruh dan modern untuk kesejahteraan Anda.</p>
+       <img alt="Modern holistic health concept with natural elements and technology" class="w-full max-w-4xl mx-auto rounded-lg shadow-md object-cover h-64 sm:h-80" src="https://placehold.co/1200x400/png?text=Modern+Holistic+Health+Concept" />
+       <p class="mt-6 text-gray-600">Pendekatan holistik menggabungkan aspek fisik, mental, dan spiritual untuk mencapai keseimbangan hidup yang optimal.</p>
+      </section>
+     `,
+     akademi: `
+      <section class="py-8">
+       <h1 class="text-3xl font-semibold text-gray-900 mb-4">Akademi Sujok Healing</h1>
+       <p class="text-gray-700 mb-6">Halaman Akademi Sujok Healing menyediakan informasi tentang pelatihan dan kursus penyembuhan Sujok yang kami tawarkan.</p>
+       <img alt="Sujok healing therapy session with hands and colorful seeds on palm" class="w-full max-w-4xl mx-auto rounded-lg shadow-md object-cover h-64 sm:h-80" src="https://placehold.co/1200x400/png?text=Sujok+Healing+Therapy" />
+       <p class="mt-6 text-gray-600">Pelajari teknik penyembuhan alternatif yang efektif dan alami melalui kursus kami yang komprehensif.</p>
+      </section>
+     `,
+     pengaturan: `
+      <section class="py-8">
+       <h1 class="text-3xl font-semibold text-gray-900 mb-4">Pengaturan</h1>
+       <p class="text-gray-700 mb-6">Atur preferensi dan pengaturan akun Anda di halaman ini untuk pengalaman yang lebih personal dan nyaman.</p>
+       <form class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+        <label class="block mb-4">
+         <span class="text-gray-700 font-medium">Nama Pengguna</span>
+         <input type="text" placeholder="Masukkan nama pengguna" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"/>
+        </label>
+        <label class="block mb-4">
+         <span class="text-gray-700 font-medium">Email</span>
+         <input type="email" placeholder="Masukkan email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"/>
+        </label>
+        <label class="block mb-6">
+         <span class="text-gray-700 font-medium">Notifikasi</span>
+         <select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+          <option>Aktif</option>
+          <option>Nonaktif</option>
+         </select>
+        </label>
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">Simpan Pengaturan</button>
+       </form>
+      </section>
+     `,
+     personal: `
+      <section class="py-8">
+       <h1 class="text-3xl font-semibold text-gray-900 mb-4">Personal</h1>
+       <p class="text-gray-700 mb-6">Halaman personal Anda berisi informasi profil dan aktivitas terbaru.</p>
+       <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+        <div class="flex items-center space-x-4 mb-6">
+         <img alt="User profile photo of a smiling person with short hair" src="https://placehold.co/80x80/png?text=User+Photo" class="rounded-full w-20 h-20 object-cover"/>
+         <div>
+          <h2 class="text-xl font-semibold text-gray-900">Nama Pengguna</h2>
+          <p class="text-gray-600">user@example.com</p>
+         </div>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Aktivitas Terbaru</h3>
+        <ul class="list-disc list-inside text-gray-700 space-y-1">
+         <li>Mengupdate profil</li>
+         <li>Mendaftar kursus Sujok Healing</li>
+         <li>Membaca artikel Holistik Modern</li>
+        </ul>
+       </div>
+      </section>
+     `
+   };
+
+   const content = document.getElementById('content');
+
+   // Slider functionality for Beranda slider inside SPA content
+   let sliderInterval;
+   function startBerandaSlider() {
+     const sliderEl = document.getElementById('slider');
+     if (!sliderEl) return;
+     let currentIndex = 0;
+     const totalSlides = sliderEl.children.length;
+     sliderEl.style.transform = 'translateX(0)';
+     clearInterval(sliderInterval);
+     sliderInterval = setInterval(() => {
+       currentIndex = (currentIndex + 1) % totalSlides;
+       sliderEl.style.transform = `translateX(-${currentIndex * 100}%)`;
+     }, 5000);
+   }
+
+   // Function to load page content
+   function loadPage(page) {
+     content.innerHTML = pages[page] || '<p class="text-center text-gray-700 py-10">Halaman tidak ditemukan.</p>';
+     if (page === 'beranda') {
+       // Start slider for Beranda
+       setTimeout(() => {
+         startBerandaSlider();
+       }, 50);
+     } else {
+       clearInterval(sliderInterval);
+     }
+     // Close mobile menu if open
+     if (!menu.classList.contains('hidden')) {
+       menu.classList.add('hidden');
+     }
+     // Update active link styles
+     updateActiveLinks(page);
+     // Focus main content for accessibility
+     const mainContent = document.getElementById('mainContent');
+     if(mainContent) mainContent.focus();
+   }
+
+   // Update active link styling
+   function updateActiveLinks(page) {
+     document.querySelectorAll('.nav-link').forEach(link => {
+       if (link.dataset.page === page) {
+         link.classList.add('text-blue-600', 'font-semibold');
+         link.classList.remove('text-gray-700');
+       } else {
+         link.classList.remove('text-blue-600', 'font-semibold');
+         link.classList.add('text-gray-700');
+       }
+     });
+     document.querySelectorAll('.mobile-nav-link').forEach(link => {
+       if (link.dataset.page === page) {
+         link.classList.add('text-blue-600', 'font-semibold', 'bg-gray-100');
+         link.classList.remove('text-gray-700');
+       } else {
+         link.classList.remove('text-blue-600', 'font-semibold', 'bg-gray-100');
+         link.classList.add('text-gray-700');
+       }
+     });
+   }
+
+   // Attach event listeners to nav links
+   document.querySelectorAll('.nav-link').forEach(link => {
+     link.addEventListener('click', e => {
+       e.preventDefault();
+       const page = e.currentTarget.dataset.page;
+       loadPage(page);
+     });
+   });
+
+   document.querySelectorAll('.mobile-nav-link').forEach(link => {
+     link.addEventListener('click', e => {
+       e.preventDefault();
+       const page = e.currentTarget.dataset.page;
+       loadPage(page);
+     });
+   });
+
+   // Also make logo clickable to Beranda
+   document.querySelector('a.flex.items-center').addEventListener('click', e => {
+     e.preventDefault();
+     loadPage('beranda');
+   });
+
+   // Initialize active link on page load
+   loadPage('beranda');
+  </script>
+ </body>
+</html>
